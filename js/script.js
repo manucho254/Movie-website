@@ -5,6 +5,8 @@ const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popular
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
 const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=';
 const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query='
+const iframeMovieLink = "https://autoembed.xyz/movie/tmdb/";
+const iframeSeriesLink = "https://autoembed.xyz/tv/tmdb/";
 
 const main = document.getElementById("main");
 const form = document.getElementById("form");
@@ -13,12 +15,14 @@ const tvSeries = document.getElementById("tvSeries");
 const movies = document.getElementById("movies");
 const nextPage = document.getElementById("next");
 const prevPage = document.getElementById("prev");
-const myMovies = document.getElementById("../movieId")
-console.log(myMovies)
+const paginated = document.getElementById("pagination");
+const playOverview = document.getElementById("play-overview");
+const playContentData = document.createElement("div");
+const iframe = document.createElement("div");
+const movieTitle = document.createElement("div");
+movieTitle.classList.add("iframes");
+
 let image = "empty.jpg";
-
-
-// initially get movies 
 
 getTvSeries(APITVSERIESURL);
 getMovies(APIMOVIEURL);
@@ -48,6 +52,7 @@ async function getTvSeries(url) {
     const resp = await fetch(url);
     const respData = await resp.json();
     showTvSeries(respData.results)
+    console.log(respData.results);
 
 }
 
@@ -72,7 +77,7 @@ function showMovies(movies) {
                <span class="${getClassByRate(vote_average)}">${vote_average}</span>
             </div>
             <div class="overview">
-            <button class="trailer" id="allTrailers">Trailer : &#9654;</button>
+            <button class="trailer" id="allTrailers">Play : &#9654;</button>
               <h3>Overview: </h3>
                 ${overview}
             </div>`
@@ -89,8 +94,23 @@ function showMovies(movies) {
             </div>`
         }
         main.appendChild(movieEl)
+        movieEl.addEventListener("click", () => {
+            movieTitle.innerText = `${title}`;
+            playContentData.innerHTML = `<span>${title}</span><br><span>Release Date: ${ release_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`
+            iframe.innerHTML = 
+                   `<iframe src="${iframeMovieLink + id}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`
+                 
+            main.innerHTML = '';
+            main.appendChild(movieTitle);
+            main.appendChild(iframe);
+            playOverview.appendChild(playContentData);
+            paginated.removeChild(nextPage);
+            paginated.removeChild(prevPage);
+        })
     });
+    
 }
+
 
 // get all Tv series
 
@@ -100,7 +120,7 @@ function showTvSeries(movies) {
 
     movies.forEach((movie) => {
 
-        const {poster_path,name,vote_average, overview, first_air_date} = movie;
+        const {poster_path,name,vote_average, overview, first_air_date, id} = movie;
         const movieEl = document.createElement("div");
         movieEl.classList.add('movie');
 
@@ -113,6 +133,7 @@ function showTvSeries(movies) {
             <span class="${getClassByRate(vote_average)}">${vote_average}</span>
             </div>
             <div class="overview">
+              <button class="trailer" id="allTrailers">Play : &#9654;</button>
                <h3>Overview: </h3>
                  ${overview}
             </div>`
@@ -129,7 +150,22 @@ function showTvSeries(movies) {
                 ${overview}
             </div>`
         }
+        let season = 1;
+        let episode  = 1;
         main.appendChild(movieEl)
+        movieEl.addEventListener("click", () => {
+            movieTitle.innerText = `${name}`;
+            playContentData.innerHTML = `<span>${name}</span><br><span>Release Date: ${ first_air_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`
+            iframe.innerHTML = 
+                   `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`
+            main.innerHTML = '';
+           
+            main.appendChild(movieTitle);
+            main.appendChild(iframe);
+            playOverview.appendChild(playContentData);
+            paginated.removeChild(nextPage);
+            paginated.removeChild(prevPage);          
+        })
     });
 }
 
@@ -191,8 +227,4 @@ prevPage.addEventListener("click", () => {
         }else{
             getMovies(APIMOVIEURL + index);}
     };
-
-});
-
-
-
+})

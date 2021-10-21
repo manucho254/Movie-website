@@ -232,6 +232,37 @@ main {
     background-color: #464c9e;
 }
 
+
+.iframes {
+    text-decoration: underline;
+    color: rgb(214, 209, 209);
+    margin : 1rem;
+    font-family: inherit;
+    font-size: 30px;
+}
+
+iframe{ 
+    width: 1368px; 
+    height: 400px;
+}
+
+#play-overview {
+    background-color: #373b69;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    color : white;
+    font-size: 20px;
+}
+
+#play-overview span {
+    margin-right: 1rem;
+    flex-direction: column;
+    letter-spacing: space-between;
+    margin-bottom: 2rem;
+}
+
 @media(max-width: 768px){
     .search {
         width: 50;
@@ -270,7 +301,7 @@ main {
         text-align: center;
     }
     main{
-        margin-top: 50px;
+        margin-top: 30px;
         display: flex;
         justify-content: center;
         padding: 0;
@@ -284,4 +315,14 @@ main {
         align-items: center;
         margin-top: 0px;
     }
+
+    .iframes {
+        margin-top: 0;
+    }
+
+    iframe {
+        width: 450px;
+        height: 300px;
+    }
+    
 }
