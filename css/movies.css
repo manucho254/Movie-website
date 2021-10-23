@@ -242,7 +242,7 @@ main {
 }
 
 iframe{ 
-    width: 1368px; 
+    width: 1350px; 
     height: 400px;
 }
 
@@ -261,6 +261,39 @@ iframe{
     flex-direction: column;
     letter-spacing: space-between;
     margin-bottom: 2rem;
+}
+
+.seasons {
+    background-color: black;
+    color: white;
+    border: hidden;
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.btnEpisodes {
+    margin: 2px;
+    border: hidden;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    color: white;
+    background-color: black;
+}
+.btnEpisodes:active {
+    transform: translateY(4px);
+}
+
+.active {
+    display: flex;
+}
+
+.inactive {
+    transform: translateY(0);
+    display: none;
 }
 
 @media(max-width: 768px){
@@ -321,7 +354,7 @@ iframe{
     }
 
     iframe {
-        width: 450px;
+        width: 400px;
         height: 300px;
     }
     

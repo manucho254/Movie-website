@@ -1,5 +1,5 @@
 // Always hide your api key
-// const  APIKEY = '04c35731a5ee918f014970082a0088b1';
+// This a dev community api so no need to hide it APIKEY = '04c35731a5ee918f014970082a0088b1';
 const APIMOVIEURL =  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
@@ -7,7 +7,9 @@ const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35
 const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query='
 const iframeMovieLink = "https://autoembed.xyz/movie/tmdb/";
 const iframeSeriesLink = "https://autoembed.xyz/tv/tmdb/";
+const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
 
+// all my elements
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
@@ -20,6 +22,7 @@ const playOverview = document.getElementById("play-overview");
 const playContentData = document.createElement("div");
 const iframe = document.createElement("div");
 const movieTitle = document.createElement("div");
+const selectSeason = document.createElement("select");
 movieTitle.classList.add("iframes");
 
 let image = "empty.jpg";
@@ -27,6 +30,7 @@ let image = "empty.jpg";
 getTvSeries(APITVSERIESURL);
 getMovies(APIMOVIEURL);
 
+// get only Tv series returned
 tvSeries.addEventListener("click",  () => {
     main.innerHTML = ''
     getTvSeries(APITVSERIESURL)
@@ -34,6 +38,8 @@ tvSeries.addEventListener("click",  () => {
     main.classList.remove("movies")
 })
 
+
+// get only movies returned
 movies.addEventListener("click",  () => {
     main.innerHTML = ''
     getMovies(APIMOVIEURL)
@@ -41,13 +47,14 @@ movies.addEventListener("click",  () => {
     main.classList.remove("series")
 })
 
-
+// fetch the url and get the movies info objects
 async function getMovies(url) {
     const resp = await fetch(url);
     const respData = await resp.json();
     showMovies(respData.results)
 }
 
+// fetch the url and get the Tv info series objects
 async function getTvSeries(url) {
     const resp = await fetch(url);
     const respData = await resp.json();
@@ -95,6 +102,7 @@ function showMovies(movies) {
         }
         main.appendChild(movieEl)
         movieEl.addEventListener("click", () => {
+
             movieTitle.innerText = `${title}`;
             playContentData.innerHTML = `<span>${title}</span><br><span>Release Date: ${ release_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`
             iframe.innerHTML = 
@@ -111,13 +119,13 @@ function showMovies(movies) {
     
 }
 
-
-// get all Tv series
+// get all Tv series and episodes
 
 function showTvSeries(movies) {
 
     main.innerHTML = '';
 
+    // looping through all the tv shows data using 
     movies.forEach((movie) => {
 
         const {poster_path,name,vote_average, overview, first_air_date, id} = movie;
@@ -150,25 +158,72 @@ function showTvSeries(movies) {
                 ${overview}
             </div>`
         }
+
+
         let season = 1;
         let episode  = 1;
         main.appendChild(movieEl)
-        movieEl.addEventListener("click", () => {
-            movieTitle.innerText = `${name}`;
-            playContentData.innerHTML = `<span>${name}</span><br><span>Release Date: ${ first_air_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`
-            iframe.innerHTML = 
-                   `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`
+        movieEl.addEventListener("click", () => { 
+            //getting the episodes for every season
             main.innerHTML = '';
-           
+            const tvSeriesSeason = `${TvSeriesurl + id}?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`       
+            movieTitle.innerText = `${name}`;
+            playContentData.innerHTML = `<span>${name}</span><br><span>Release Date: ${ first_air_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`;
+
+            (async function getSeason() {
+                iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`
+                const resp = await fetch(tvSeriesSeason);
+                const respData = await resp.json();
+               
+                console.log(respData.season_number)
+
+                selectSeason.classList.add('seasons');
+                for (index = 1 ; index <= respData.number_of_seasons; index++){
+                    const option = document.createElement("option");
+                    selectSeason.classList.add("active");
+                    option.value = `${index}`;
+                    option.innerText = `${index}`;
+                    selectSeason.appendChild(option);
+                    main.appendChild(selectSeason);
+                    option.addEventListener("click", () => {
+                        season = option.value;
+                        iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`;
+                        (async function getSeasonEpisodes() {
+                            const tvSeriesEpisodes = `${TvSeriesurl + id}/season/${season}?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`
+                            const resp = await fetch(tvSeriesEpisodes);
+                            const respData = await resp.json();
+                            console.log(respData);
+                            // iterating through the Episodes and creating a button
+                            for (index = 1 ; index <= respData.episodes.length; index++){
+                                const btnEpisodes = document.createElement("button");
+                                btnEpisodes.classList.add("btnEpisodes")
+                                btnEpisodes.innerText = `${index}`;
+                                btnEpisodes.value = `${index}`;
+                                main.appendChild(btnEpisodes);
+                                btnEpisodes.addEventListener("click", () => { 
+                                    episode = btnEpisodes.value;
+                                    iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">` 
+                                });   
+                            }
+                        })();
+                    }); 
+                };
+               
+            })();
+
+        
             main.appendChild(movieTitle);
-            main.appendChild(iframe);
+            // main.appendChild(iframe);
+            console.log(iframe)
             playOverview.appendChild(playContentData);
-            paginated.removeChild(nextPage);
-            paginated.removeChild(prevPage);          
+            // paginated.removeChild(nextPage);
+            // paginated.removeChild(prevPage);  
+            paginated.remove()        
         })
     });
 }
 
+// change rating color if the conditions are meant you can also use switch statements
 function getClassByRate(vote) {
     if (vote >= 8) {
         return 'green';
@@ -179,7 +234,7 @@ function getClassByRate(vote) {
     }
 }
 
-// search
+// Search fuctionality but not the best, but as of now we will let it be
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -198,8 +253,7 @@ form.addEventListener('submit', (e) => {
     }
 });
 
-// pagination 
-
+// pagination using button but planning to do an infinate scroll
 
 let index = 1;
 
