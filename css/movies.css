@@ -126,7 +126,6 @@ main {
     color: white;
     border-bottom-right-radius: 5px;
     text-align: center;
-
 }
 
 .movie-info {
@@ -193,24 +192,10 @@ main {
     transform: translateY(0);
 }
 
-.notfound {
-    background-color: rgb(14, 197, 121);
-    color:  white;
-    position: absolute;
-    top: 300px;
-    left: 0;
-    width: 100%;
-    height: 75%;
-    text-align: center;
-}
-
-
 .overview h3 {
     font-family: inherit;
     margin-top: 0;
 }
-
-
 
 .pagination {
     display: flex;
@@ -232,18 +217,21 @@ main {
     background-color: #464c9e;
 }
 
-
 .iframes {
     text-decoration: underline;
-    color: rgb(214, 209, 209);
+    color: rgb(207, 184, 184);
     margin : 1rem;
     font-family: inherit;
     font-size: 30px;
+    font-weight: bold;
 }
 
 iframe{ 
-    width: 1350px; 
+    width: 100vw;
     height: 400px;
+    padding: 0.1rem;
+    position: relative;
+    margin-bottom: 1rem;
 }
 
 #play-overview {
@@ -252,6 +240,7 @@ iframe{
     justify-content: center;
     align-items: center;
     padding: 1rem;
+    margin: 0.5rem;
     color : white;
     font-size: 20px;
 }
@@ -263,36 +252,21 @@ iframe{
     margin-bottom: 2rem;
 }
 
-.seasons {
+.select-dropdown {
+    position: relative;
+    width: 150px;
+    height: 30px;
     background-color: black;
     color: white;
     border: hidden;
-    width: 100px;
-    height: 25px;
-    border-radius: 5px;
+    border-radius: 20px;
     font-family: inherit;
     font-weight: bold;
+    font-weight: 15px;
+    margin: 1rem;
 }
 
-.btnEpisodes {
-    margin: 2px;
-    border: hidden;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
-    color: white;
-    background-color: black;
-}
-.btnEpisodes:active {
-    transform: translateY(4px);
-}
-
-.active {
-    display: flex;
-}
-
-.inactive {
-    transform: translateY(0);
+.closefrd {
     display: none;
 }
 
@@ -354,8 +328,24 @@ iframe{
     }
 
     iframe {
-        width: 400px;
+        width: 420px;
         height: 300px;
+    }
+
+    .select-dropdown {
+        width: 150px;
+        height: 30px;
+        margin: 2px;
+        margin-bottom: 1rem;
+        font-size: 15px;
+    }
+    .iframes {
+        display: none;
+    }
+
+    #play-overview {
+        margin: 1rem;
+        margin-top: 0;
     }
     
 }

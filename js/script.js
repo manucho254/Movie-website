@@ -1,5 +1,6 @@
 // Always hide your api key
 // This a dev community api so no need to hide it APIKEY = '04c35731a5ee918f014970082a0088b1';
+// we will take care of the api soon
 const APIMOVIEURL =  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
@@ -9,7 +10,7 @@ const iframeMovieLink = "https://autoembed.xyz/movie/tmdb/";
 const iframeSeriesLink = "https://autoembed.xyz/tv/tmdb/";
 const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
 
-// all my elements
+// getting some of my elements
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
@@ -23,6 +24,9 @@ const playContentData = document.createElement("div");
 const iframe = document.createElement("div");
 const movieTitle = document.createElement("div");
 const selectSeason = document.createElement("select");
+const selectSeriesEpesisode = document.createElement("select");
+selectSeason.classList.add('select-dropdown');
+selectSeriesEpesisode.classList.add("select-dropdown");
 movieTitle.classList.add("iframes");
 
 let image = "empty.jpg";
@@ -159,25 +163,23 @@ function showTvSeries(movies) {
             </div>`
         }
 
-
         let season = 1;
         let episode  = 1;
         main.appendChild(movieEl)
+    
         movieEl.addEventListener("click", () => { 
             //getting the episodes for every season
+            selectSeason.innerHTML = '';
             main.innerHTML = '';
             const tvSeriesSeason = `${TvSeriesurl + id}?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`       
             movieTitle.innerText = `${name}`;
             playContentData.innerHTML = `<span>${name}</span><br><span>Release Date: ${ first_air_date }</span><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span><br><span>Overview: <p>${overview}</p></span>`;
-
-            (async function getSeason() {
+            
+            async function getSeason() {
                 iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
-               
-                console.log(respData.season_number)
-
-                selectSeason.classList.add('seasons');
+        
                 for (index = 1 ; index <= respData.number_of_seasons; index++){
                     const option = document.createElement("option");
                     selectSeason.classList.add("active");
@@ -185,35 +187,47 @@ function showTvSeries(movies) {
                     option.innerText = `${index}`;
                     selectSeason.appendChild(option);
                     main.appendChild(selectSeason);
+                    let CountLoadEpisodesClicks  = 0;
+
                     option.addEventListener("click", () => {
+                        CountLoadEpisodesClicks += 1; // checking the number clicks for a certain season to load Episodes 
                         season = option.value;
                         iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">`;
-                        (async function getSeasonEpisodes() {
+                        async function getSeasonEpisodes() {
                             const tvSeriesEpisodes = `${TvSeriesurl + id}/season/${season}?api_key=04c35731a5ee918f014970082a0088b1&language=en-US`
                             const resp = await fetch(tvSeriesEpisodes);
                             const respData = await resp.json();
                             console.log(respData);
                             // iterating through the Episodes and creating a button
+                           
                             for (index = 1 ; index <= respData.episodes.length; index++){
-                                const btnEpisodes = document.createElement("button");
-                                btnEpisodes.classList.add("btnEpisodes")
-                                btnEpisodes.innerText = `${index}`;
-                                btnEpisodes.value = `${index}`;
-                                main.appendChild(btnEpisodes);
-                                btnEpisodes.addEventListener("click", () => { 
-                                    episode = btnEpisodes.value;
+                                const option = document.createElement("option");
+
+                                option.innerText = `${index}`;
+                                option.value = `${index}`;
+
+                                selectSeriesEpesisode.appendChild(option);
+                                main.appendChild(selectSeriesEpesisode);
+                                option.addEventListener("click", () => { 
+                                    episode = option.value;
                                     iframe.innerHTML = `<iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen">` 
-                                });   
+                                }); 
                             }
-                        })();
+                        };
+                        if (CountLoadEpisodesClicks == 1) {
+                            getSeasonEpisodes()
+                            selectSeriesEpesisode.innerHTML = "";
+                            main.removeChild(selectSeriesEpesisode);
+                            main.appendChild(selectSeriesEpesisode);
+                        }else {
+                            console.log("error")
+                        }
                     }); 
                 };
-               
-            })();
-
-        
+            };
+            getSeason();
             main.appendChild(movieTitle);
-            // main.appendChild(iframe);
+            main.appendChild(iframe);
             console.log(iframe)
             playOverview.appendChild(playContentData);
             // paginated.removeChild(nextPage);
@@ -244,12 +258,8 @@ form.addEventListener('submit', (e) => {
         getTvSeries(SEARCHSERIESAPI + searchTerm);
         getMovies(SEARCHMOVIEAPI + searchTerm);
         search.value = '';
+        playOverview.remove();
         
-    }else if(searchTerm === ""){
-        const notFound = document.createElement("h3");
-        notFound.classList.add("notfound");
-        notFound.innerHTML =  `${searchTerm } search cannot be empty`;
-        main.appendChild(notFound)
     }
 });
 
