@@ -1,6 +1,7 @@
 // Always hide your api key
 // This a dev community api so no need to hide it APIKEY = '04c35731a5ee918f014970082a0088b1';
 // we will take care of the api-key soon
+const allow = "allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'";
 const APIMOVIEURL =  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=';
@@ -32,8 +33,6 @@ selectSeriesEpesisode.classList.add("select-dropdown");
 selectSeason.classList.add('select-dropdown');
 iframe.classList.add("iframeSizing");
 movieTitle.classList.add("iframes");
-const allow = "allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture '";
-
 let image = "empty.jpg"; // this is for movies that dont have images
 
 
