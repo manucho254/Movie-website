@@ -32,7 +32,7 @@ selectSeriesEpesisode.classList.add("select-dropdown");
 selectSeason.classList.add('select-dropdown');
 iframe.classList.add("iframeSizing");
 movieTitle.classList.add("iframes");
-const sandboxed = "sandbox='allow-scripts allow-same-origin'";
+const allow = "allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture '";
 
 let image = "empty.jpg"; // this is for movies that dont have images
 
@@ -124,7 +124,7 @@ function showMovies(movies) {
             <br><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}
             </span><br><span>Overview: <p>${overview}</p></span>`
             iframe.innerHTML = 
-                `<iframe src="${iframeMovieLink + id}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${sandboxed}></iframe>`
+                `<iframe src="${iframeMovieLink + id}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`
                  
             main.innerHTML = '';
             main.appendChild(movieTitle);
@@ -197,7 +197,7 @@ function showTvSeries(movies) {
                 paginated.remove();
                 iframe.innerHTML = `
                  <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                  frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${sandboxed}></iframe>`
+                  frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
         
@@ -213,7 +213,7 @@ function showTvSeries(movies) {
                         season = option.value;
                         iframe.innerHTML = `
                           <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                          frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${sandboxed}></iframe>`;
+                          frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`;
 
                         async function getSeasonEpisodes() {
                             const tvSeriesEpisodes = `${TvSeriesurl + id}/season/${season + apiKey}`;
@@ -232,7 +232,7 @@ function showTvSeries(movies) {
                                     episode = option.value;
                                     iframe.innerHTML = `
                                      <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                                     frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${sandboxed}></iframe>` 
+                                     frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>` 
                                 }); 
                             }
                         };
