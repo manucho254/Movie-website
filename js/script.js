@@ -284,7 +284,6 @@ form.addEventListener('submit', (e) => {
 
 // pagination using button but planning to do an infinate scroll
 
-
 let index = 1;
 
 nextPage.addEventListener("click", () => {
