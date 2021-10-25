@@ -225,7 +225,6 @@ function showTvSeries(movies) {
                                 option.innerText = `Episode ${index}`;
                                 option.value = `${index}`;
                                 selectSeriesEpesisode.appendChild(option);
-                                console.log(selectSeriesEpesisode)
                                 main.appendChild(selectSeriesEpesisode);
                                 option.addEventListener("click", () => { 
                                     episode = option.value;
