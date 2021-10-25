@@ -1,15 +1,15 @@
 // Always hide your api key
 // This a dev community api so no need to hide it APIKEY = '04c35731a5ee918f014970082a0088b1';
-// we will take care of the api soon
+// we will take care of the api-key soon
 const APIMOVIEURL =  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=';
 const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query='
+const apiKey = "?api_key=04c35731a5ee918f014970082a0088b1&language=en-US";
 const iframeMovieLink = "https://autoembed.xyz/movie/tmdb/";
 const iframeSeriesLink = "https://autoembed.xyz/tv/tmdb/";
 const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
-const apiKey = "?api_key=04c35731a5ee918f014970082a0088b1&language=en-US";
 
 // getting some of my elements
 
@@ -48,7 +48,6 @@ tvSeries.addEventListener("click",  () => {
     playOverview.innerHTML = "";
     main.appendChild(paginated);
 })
-
 
 // get only movies returned
 movies.addEventListener("click",  () => {
@@ -261,7 +260,6 @@ function getClassByRate(vote) {
     }
 }
 
-let searchData = [];
 // Search fuctionality but not the best, but as of now we will let it be
 form.addEventListener('submit', (e) => {
     e.preventDefault();
