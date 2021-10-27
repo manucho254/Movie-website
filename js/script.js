@@ -11,6 +11,7 @@ const iframeMovieLink = "https://www.2embed.ru/embed/tmdb/movie?id=";
 const iframeSeriesLink = "https://www.2embed.ru/embed/tmdb/tv?id=";
 const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
+const sandboxed = 'allow-scripts allow-same-origin';
 
 // getting some of my elements
 
@@ -123,7 +124,7 @@ function showMovies(movies) {
             iframe.innerHTML = 
                 `<iframe src="${iframeMovieLink + id}" 
                   frameborder="0" scrolling="no" 
-                   allowfullscreen="allowfullscreen" ${allow} " sandbox='allow-scripts allow-same-origin'>
+                   allowfullscreen="allowfullscreen" ${allow} ${sandboxed}" >
                 </iframe>`
                  
             main.innerHTML = '';
@@ -199,7 +200,7 @@ function showTvSeries(movies) {
                  <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                   frameborder="0" scrolling="no" 
                   allowfullscreen="allowfullscreen" ${allow} 
-                  sandbox='allow-scripts allow-same-origin'>
+                   ${sandboxed}>
                 </iframe>`
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
@@ -217,7 +218,7 @@ function showTvSeries(movies) {
                         iframe.innerHTML = `
                           <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                            frameborder="0" scrolling="no" 
-                           allowfullscreen="allowfullscreen" ${allow} sandbox='allow-scripts allow-same-origin'>
+                           allowfullscreen="allowfullscreen" ${allow}  ${sandboxed}>
                           </iframe>`;
 
                         async function getSeasonEpisodes() {
@@ -238,7 +239,7 @@ function showTvSeries(movies) {
                                      <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                                        frameborder="0" scrolling="no" 
                                        allowfullscreen="allowfullscreen" ${allow} 
-                                       sandbox='allow-scripts allow-same-origin'>
+                                        ${sandboxed}>
                                      </iframe>` 
                                 }); 
                             }
