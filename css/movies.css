@@ -2,8 +2,9 @@
     box-sizing: border-box;
 }
 
+/* #22254b*/
 body {
-    background-color: #22254b;
+    background-color:  #22254b;
     margin: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -29,6 +30,7 @@ body {
     color: lightsteelblue;
 }
 
+/* #373b69*/
 header {
     background-color: #373b69;
     display: flex;

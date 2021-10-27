@@ -7,8 +7,8 @@ const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popular
 const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=';
 const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query='
 const apiKey = "?api_key=04c35731a5ee918f014970082a0088b1&language=en-US";
-const iframeMovieLink = "https://autoembed.xyz/movie/tmdb/";
-const iframeSeriesLink = "https://autoembed.xyz/tv/tmdb/";
+const iframeMovieLink = "https://www.2embed.ru/embed/tmdb/movie?id=";
+const iframeSeriesLink = "https://www.2embed.ru/embed/tmdb/tv?id=";
 const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
 
@@ -41,24 +41,22 @@ getMovies(APIMOVIEURL);
 
 // get only Tv series returned
 tvSeries.addEventListener("click",  () => {
-    main.innerHTML = ''
+    main.innerHTML = '';
     getTvSeries(APITVSERIESURL)
     main.classList.add("series")
     main.classList.remove("movies")
     playOverview.innerHTML = "";
-    main.appendChild(paginated);
-})
+});
 
 // get only movies returned
 movies.addEventListener("click",  () => {
     window.location.href + "#Movies"
-    main.innerHTML = ''
+    main.innerHTML = '';
     getMovies(APIMOVIEURL)
     main.classList.add("movies")
     main.classList.remove("series")
     playOverview.innerHTML = "";
-    main.appendChild(paginated);
-})
+});
 
 // fetch the url and get the movies info objects
 async function getMovies(url) {
@@ -123,7 +121,10 @@ function showMovies(movies) {
             <br><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}
             </span><br><span>Overview: <p>${overview}</p></span>`
             iframe.innerHTML = 
-                `<iframe src="${iframeMovieLink + id}" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`
+                `<iframe src="${iframeMovieLink + id}" 
+                  frameborder="0" scrolling="no" 
+                   allowfullscreen="allowfullscreen" ${allow} " sandbox='allow-scripts allow-same-origin'>
+                </iframe>`
                  
             main.innerHTML = '';
             main.appendChild(movieTitle);
@@ -189,14 +190,17 @@ function showTvSeries(movies) {
              <img src="${IMGPATH + poster_path}" alt="${name}">
             </div>
              <span>${name}</span><br><br><span>Release Date: ${ first_air_date }</span>
-             <br><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span>
-             <br><br><span>Overview: <p>${overview}</p></span>`;
+              <br><br><span class="${getClassByRate(vote_average)}">Rating : ${vote_average}</span>
+              <br><br><span>Overview: <p>${overview}</p></span>`;
             
             async function getSeason() {
                 paginated.remove();
                 iframe.innerHTML = `
-                 <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                  frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`
+                 <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
+                  frameborder="0" scrolling="no" 
+                  allowfullscreen="allowfullscreen" ${allow} 
+                  sandbox='allow-scripts allow-same-origin'>
+                </iframe>`
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
         
@@ -211,8 +215,10 @@ function showTvSeries(movies) {
                     option.addEventListener("click", () => {
                         season = option.value;
                         iframe.innerHTML = `
-                          <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                          frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>`;
+                          <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
+                           frameborder="0" scrolling="no" 
+                           allowfullscreen="allowfullscreen" ${allow} sandbox='allow-scripts allow-same-origin'>
+                          </iframe>`;
 
                         async function getSeasonEpisodes() {
                             const tvSeriesEpisodes = `${TvSeriesurl + id}/season/${season + apiKey}`;
@@ -229,8 +235,11 @@ function showTvSeries(movies) {
                                 option.addEventListener("click", () => { 
                                     episode = option.value;
                                     iframe.innerHTML = `
-                                     <iframe src="${iframeSeriesLink + id + "-" + season + "-" + episode}" 
-                                     frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" ${allow}></iframe>` 
+                                     <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
+                                       frameborder="0" scrolling="no" 
+                                       allowfullscreen="allowfullscreen" ${allow} 
+                                       sandbox='allow-scripts allow-same-origin'>
+                                     </iframe>` 
                                 }); 
                             }
                         };
