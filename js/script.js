@@ -5,11 +5,11 @@ const allow = "allow='accelerometer; autoplay; clipboard-write; encrypted-media;
 const APIMOVIEURL =  'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const APITVSERIESURL = 'https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=';
 const SEARCHMOVIEAPI = 'https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=';
-const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query='
+const SEARCHSERIESAPI = 'https://api.themoviedb.org/3/search/tv?&api_key=04c35731a5ee918f014970082a0088b1&query=';
 const apiKey = "?api_key=04c35731a5ee918f014970082a0088b1&language=en-US";
 const iframeMovieLink = "https://www.2embed.ru/embed/tmdb/movie?id=";
 const iframeSeriesLink = "https://www.2embed.ru/embed/tmdb/tv?id=";
-const TvSeriesurl = "https://api.themoviedb.org/3/tv/"
+const TvSeriesurl = "https://api.themoviedb.org/3/tv/";
 const IMGPATH = 'https://image.tmdb.org/t/p/w1280';
 const sandboxed = 'allow-scripts allow-same-origin';
 
@@ -29,6 +29,7 @@ const movieTitle = document.createElement("div");
 const main = document.getElementById("main");
 const form = document.getElementById("form");
 const iframe = document.createElement("div");
+const body = document.getElementById("showcase");
 
 selectSeriesEpesisode.classList.add("select-dropdown");
 selectSeason.classList.add('select-dropdown');
@@ -43,19 +44,18 @@ getMovies(APIMOVIEURL);
 // get only Tv series returned
 tvSeries.addEventListener("click",  () => {
     main.innerHTML = '';
-    getTvSeries(APITVSERIESURL)
-    main.classList.add("series")
-    main.classList.remove("movies")
+    getTvSeries(APITVSERIESURL);
+    main.classList.add("series");
+    main.classList.remove("movies");
     playOverview.innerHTML = "";
 });
 
 // get only movies returned
 movies.addEventListener("click",  () => {
-    window.location.href + "#Movies"
     main.innerHTML = '';
-    getMovies(APIMOVIEURL)
-    main.classList.add("movies")
-    main.classList.remove("series")
+    getMovies(APIMOVIEURL);
+    main.classList.add("movies");
+    main.classList.remove("series");
     playOverview.innerHTML = "";
 });
 
@@ -63,14 +63,14 @@ movies.addEventListener("click",  () => {
 async function getMovies(url) {
     const resp = await fetch(url);
     const respData = await resp.json();
-    showMovies(respData.results)
+    showMovies(respData.results);
 }
 
 // fetch the url and get the Tv info series objects
 async function getTvSeries(url) {
     const resp = await fetch(url);
     const respData = await resp.json();
-    showTvSeries(respData.results)
+    showTvSeries(respData.results);
 }
 
 // get all Movies
@@ -112,7 +112,10 @@ function showMovies(movies) {
         }
         main.appendChild(movieEl)
         movieEl.addEventListener("click", () => {
-            paginated.remove();
+            
+            document.title = `Home | ${ title }`;
+            body.removeChild(paginated);
+
             movieTitle.innerText = `${title}`;
             playContentData.innerHTML = `
             <div class="play-images">
@@ -178,10 +181,11 @@ function showTvSeries(movies) {
 
         let season = 1;
         let episode  = 1;
-        main.appendChild(movieEl)
+        main.appendChild(movieEl);
     
         movieEl.addEventListener("click", () => { 
             //getting the episodes for every season
+            document.title = `Home | ${ name }`
             selectSeason.innerHTML = '';
             main.innerHTML = '';
             const tvSeriesSeason = `${TvSeriesurl + id + apiKey}`       
@@ -240,11 +244,11 @@ function showTvSeries(movies) {
                                        frameborder="0" scrolling="no" 
                                        allowfullscreen="allowfullscreen" ${allow} 
                                         ${sandboxed}>
-                                     </iframe>` 
+                                     </iframe>`;
                                 }); 
                             }
                         };
-                        getSeasonEpisodes()
+                        getSeasonEpisodes();
                         selectSeriesEpesisode.innerHTML = "";
                         main.removeChild(selectSeriesEpesisode);
                         main.appendChild(selectSeriesEpesisode);
@@ -316,6 +320,6 @@ prevPage.addEventListener("click", () => {
         if (main.classList == "series") {
             getTvSeries(APITVSERIESURL + index);
         }else{
-            getMovies(APIMOVIEURL + index);}
+            getMovies(APIMOVIEURL + index)};
     };
 })
