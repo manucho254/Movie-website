@@ -205,7 +205,7 @@ function showTvSeries(movies) {
                   frameborder="0" scrolling="no" 
                   allowfullscreen="allowfullscreen" ${allow} 
                    ${sandboxed}>
-                </iframe>`
+                </iframe>`;
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
         
