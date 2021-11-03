@@ -79,7 +79,7 @@ function showMovies(movies) {
     main.innerHTML = '';
     // mapping all the objects to geta single object can also forEach
     movies.map((movie) => {
-
+        console.log(movie)
         const {poster_path,title,vote_average,overview, release_date, id} = movie
         const movieEl = document.createElement("div");
         movieEl.classList.add('movie');
@@ -293,30 +293,30 @@ form.addEventListener('submit', (e) => {
 
 // pagination using button but planning to do an infinate scroll
 
-let index = 1;
+let currentPage = 1;
 
 nextPage.addEventListener("click", () => {
-    index++;
+    currentPage++;
     if (main.classList == "series") {
-        getTvSeries(APITVSERIESURL + index);
+        getTvSeries(APITVSERIESURL + currentPage);
     }else if (main.classList == "movies" || main.classList == "") {
-        getMovies(APIMOVIEURL + index);
+        getMovies(APIMOVIEURL + currentPage);
     }
 });
 
 prevPage.addEventListener("click", () => {
-    if (index > 1 ){
-        index--;
+    if (currentPage > 1 ){
+        currentPage--;
         if (main.classList == "series") {
-            getTvSeries(APITVSERIESURL + index);
+            getTvSeries(APITVSERIESURL + currentPage);
         }else {
-            getMovies(APIMOVIEURL + index);
+            getMovies(APIMOVIEURL + currentPage);
         };
 
     }else{
         if (main.classList == "series") {
-            getTvSeries(APITVSERIESURL + index);
+            getTvSeries(APITVSERIESURL + currentPage);
         }else{
-            getMovies(APIMOVIEURL + index)};
+            getMovies(APIMOVIEURL + currentPage)};
     };
 })
