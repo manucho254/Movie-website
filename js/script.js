@@ -125,7 +125,7 @@ function showMovies(movies) {
             iframe.innerHTML = 
                 `<iframe src="${iframeMovieLink + id}" 
                   frameborder="0" scrolling="no" 
-                   allowfullscreen="allowfullscreen" ${sandboxed}" >
+                   allowfullscreen="allowfullscreen" sandbox="${sandboxed}" >
                 </iframe>`
                  
             main.innerHTML = '';
@@ -200,7 +200,7 @@ function showTvSeries(movies) {
                 iframe.innerHTML = `
                  <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                   frameborder="0" scrolling="no" 
-                  allowfullscreen="allowfullscreen"${sandboxed}>
+                  allowfullscreen="allowfullscreen" sandbox="${sandboxed}">
                 </iframe>`;
                 const resp = await fetch(tvSeriesSeason);
                 const respData = await resp.json();
@@ -218,7 +218,7 @@ function showTvSeries(movies) {
                         iframe.innerHTML = `
                           <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                            frameborder="0" scrolling="no" 
-                           allowfullscreen="allowfullscreen" ${sandboxed}>
+                           allowfullscreen="allowfullscreen" sandbox="${sandboxed}" >
                           </iframe>`;
 
                         async function getSeasonEpisodes() {
@@ -238,7 +238,7 @@ function showTvSeries(movies) {
                                     iframe.innerHTML = `
                                      <iframe src="${iframeSeriesLink + id + '&s=' + season + '&e=' + episode}" 
                                        frameborder="0" scrolling="no" 
-                                       allowfullscreen="allowfullscreen" ${sandboxed}>
+                                       allowfullscreen="allowfullscreen" sandbox="${sandboxed}">
                                      </iframe>`;
                                 }); 
                             }
